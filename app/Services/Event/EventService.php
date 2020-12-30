@@ -35,9 +35,7 @@ class EventService
 
         $query->orderBy('initial_date', 'DESC');
     
-        $query->paginate($params['paginate'] ?? 10);
-
-        return $query->get();
+        return $query->paginate($params['paginate'] ?? 10);
     }
     
     /**
