@@ -30,11 +30,22 @@ Route::namespace('Api\Auth')->prefix('/auth')->group(function () {
   
   //#UserCreate
   Route::post('/register', 'RegisterController@create'); 
-  Route::post('/email/resend', 'VerificationController@resend');
-  Route::post('/email/verify', 'VerificationController@verify');
+  //Route::post('/email/resend', 'VerificationController@resend');
+  //Route::post('/email/verify', 'VerificationController@verify');
 
   /* Password Reset Routes */
-  Route::post('password/email', 'ResetPasswordController@sendResetLinkEmail');
-  Route::post('password/reset', 'ResetPasswordController@reset');
+  //Route::post('password/email', 'ResetPasswordController@sendResetLinkEmail');
+  //Route::post('password/reset', 'ResetPasswordController@reset');
+
+});
+
+
+/**
+ * Auth Events
+ */
+Route::namespace('Api\Event')->prefix('/events')->group(function () {
+
+  Route::GET('/', 'EventController@get');
+  Route::post('/new', 'EventController@create')->middleware(['auth:api']);
 
 });
