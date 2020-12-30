@@ -137,7 +137,7 @@ OBS: São obrigatórios Campos com "Required"
 
 => #createUser
 
-POST: https://project-ca-printf-backend.herokuapp.com/api/auth/registration
+POST: https://project-ca-printf-backend.herokuapp.com/api/auth/register
 
 User: "Anônimo"
 
