@@ -137,7 +137,7 @@ OBS: São obrigatórios Campos com "Required"
 
 => #createUser
 
-POST: localhost:8000/api/auth/registration
+POST: https://project-ca-printf-backend.herokuapp.com/api/auth/registration
 
 User: "Anônimo"
 
@@ -167,3 +167,144 @@ response 201:{
 }
 
 ```
+
+### Login
+
+```
+
+=> #Login
+
+POST: https://project-ca-printf-backend.herokuapp.com/api/auth/login
+
+User: "Anônimo"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json"
+}
+
+
+request:{
+  "email": "string", "Required"
+  "password": "string", "Required"
+}
+
+response 200:{
+  "data": {
+    "id": 1,
+    "email": "ademir_ti@live.com",
+    "name": "Ademir Rocha"
+  },
+  "meta": {
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiYmJjMjFjYzA0NjQyNzlkYmZhMGYwYzAyZDcwOWJmOTAyOTcxZWM1OTc0ZDBjNjBkMTk5MDQ3NzIzNmRjNzEyODZjMzJkNjExZmVlYjA0NTYiLCJpYXQiOiIxNjA5MjkzNjcyLjkwMTg1MyIsIm5iZiI6IjE2MDkyOTM2NzIuOTAxODY0IiwiZXhwIjoiMTY0MDgyOTY3Mi44Nzg1MjciLCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.uEFMSOn_IQtyJgv2C4RquecweBaG5i4qxxsH1GrW7tgo_A1V7Otzh_ucrEzeCEiZC5_W7-hlqpzG6iTFahAR8HgwkVkxCZW3kz0Aa9Z5krDej8Bh_f4pg_ZhZrWOQ8zUn8hNfV1FIrOjQJO65x4Dl0gREOyvyi4xFFTXrpkfzJoYdglold2bojLMaA_d6DZ62iIVwRrN--4GK8SMauEhDw_0nX0OcPZ4n3NVsYbMEhG936jsnqz_NkmAXMYufvqlEwcMWwBh897jwOojZDWA_pEeg6Bj06BwfNUb_oaSTSc9pI8xStwAxIfhW6B6ojvWM1RfzCnrfEWeveHc1nJnPAh6FrLapXxBjR-z9sQvNnP2TVcEvUVpq9xh6856hNT7xtX5LzKLleUjKmGhGX0j9SAUDVllsuKCmjLLvtBouPLpCzm3uh0Y6ibMc_AMkfxgL-JCYQdhPoLz7zIK1PQXUStMkGASUPQJLn6ppOTCVuStd4u1GOs03Glslxwh9C6UHOpqCy4qe3EKQoL2L41r5iam75heLmLPvEyQB-N0sK3bsp3"
+  }
+}
+
+```
+
+
+### CreateEvent
+
+```
+
+=> #CreateEvent
+
+POST: https://project-ca-printf-backend.herokuapp.com/api/events/new
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "title": "string", "Required"
+  "description": "string", "Required"
+  "initial_date": "date", "Required"
+  "final_date": "date", "Required"
+  "state": "enum in:Ativo,Inativo,Cancelado", "Optional"
+}
+
+response 201:{
+  "data": {
+    "id": 1,
+    "title": "Novo Evento",
+    "description": "2º evento do CA printf 2021",
+    "initial_date": "2021-01-02",
+    "final_date": "2021-01-03",
+    "state": "Ativo"
+  }
+}
+
+```
+
+### GetEvents
+
+```
+
+=> #GetEvents
+
+GET: https://project-ca-printf-backend.herokuapp.com/api/events/
+
+User: "Anônimo"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json"
+}
+
+
+request:{
+  "paginate": "inteiro", "Usado para paginação, default=10", "Optional"
+}
+
+response 200:{
+  "data": [
+    {
+      "id": 1,
+      "title": "Novo Evento",
+      "description": "2º evento do CA printf 2021",
+      "initial_date": "2021-01-02",
+      "final_date": "2021-01-03",
+      "state": "Ativo"
+    }
+  ],
+  "links": {
+    "first": "http:\/\/project-ca-printf-backend.herokuapp.com\/public\/api\/events?page=1",
+    "last": "http:\/\/project-ca-printf-backend.herokuapp.com\/public\/api\/events?page=1",
+    "prev": null,
+    "next": null
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 1,
+    "links": [
+      {
+        "url": null,
+        "label": "&laquo; Anterior",
+        "active": false
+      },
+      {
+        "url": "http:\/\/project-ca-printf-backend.herokuapp.com\/public\/api\/events?page=1",
+        "label": 1,
+        "active": true
+      },
+      {
+        "url": null,
+        "label": "Próxima &raquo;",
+        "active": false
+      }
+    ],
+    "path": "http:\/\/project-ca-printf-backend.herokuapp.com\/public\/api\/events",
+    "per_page": 10,
+    "to": 1,
+    "total": 1
+  }
+}
+
+```
+
