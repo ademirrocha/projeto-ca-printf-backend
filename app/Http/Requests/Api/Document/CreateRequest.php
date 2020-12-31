@@ -27,7 +27,13 @@ class CreateRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'file' => ['required', 'file'],
+            'file' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        ];
+    }
+
+    public function messages(){
+        return [
+            'file.max' => 'Arquivo não pode ser maior que 10MB'
         ];
     }
 

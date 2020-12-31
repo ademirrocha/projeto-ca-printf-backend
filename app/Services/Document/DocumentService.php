@@ -51,17 +51,23 @@ class DocumentService
 
         $document = Document::find($params['file']);
 
+        $nameFile = preg_replace('/[ _]+/' , '_' , $document->title);
+
+        $extension = explode('.', $document->file);
+
+        $nameFile = $nameFile.'.'.$extension[1];
+
         if($document->local == 's3'){
 
             if (Storage::disk('s3')->exists('documents/' . $document->file)) {
-                $contents = Storage::disk('s3')->download('documents/' . $document->file);
+                $contents = Storage::disk('s3')->download('documents/' . $document->file, $nameFile);
 
                 return $contents;
             }
 
         }else{
             if (Storage::disk('local')->exists('documents/' . $document->file)) {
-                $contents = Storage::disk('local')->download('documents/' . $document->file);
+                $contents = Storage::disk('local')->download('documents/' . $document->file, $nameFile);
 
                 return $contents;
             }

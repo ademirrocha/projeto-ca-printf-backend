@@ -8,11 +8,12 @@ use App\Services\Document\DocumentService;
 use App\Http\Requests\Api\Document\CreateRequest;
 use App\Http\Requests\Api\Document\DownloadRequest;
 use App\Http\Resources\Api\Document\DocumentResource;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class DocumentController extends Controller
 {
-    
+
 	/**
      * @var DocumentService
      */
@@ -34,7 +35,7 @@ class DocumentController extends Controller
     public function create(CreateRequest $request)
     {
     	$document = $this->documentService->create($request->all());
-        
+
         return new DocumentResource($document);
     }
 
@@ -52,6 +53,12 @@ class DocumentController extends Controller
     {
 
     	$document = $this->documentService->download($request->all());
+
+        if(isset($document->errors)){
+            return response()->json([
+                'errors' => $document['errors']
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         return $document;
     }
