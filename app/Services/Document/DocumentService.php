@@ -51,7 +51,7 @@ class DocumentService
 
         $document = Document::find($params['file']);
 
-        if(env('FILESYSTEM_EXTERNAL') == true){
+        if($document->local == 's3'){
 
             if (Storage::disk('s3')->exists('documents/' . $document->file)) {
                 $contents = Storage::disk('s3')->download('documents/' . $document->file);
@@ -87,8 +87,10 @@ class DocumentService
 
         if(env('FILESYSTEM_EXTERNAL') == true){
             $file = Storage::disk('s3')->put('documents', $data['file']);
+            $local = 's3';
         }else{
             $file = Storage::disk('local')->put('documents', $data['file']);
+            $local = 'local';
         }
 
         $nameFile = explode('documents/', $file);
@@ -96,7 +98,8 @@ class DocumentService
 
         $document = Document::create([
             'title' => $data['title'],
-            'file' => $nameFile[1]
+            'file' => $nameFile[1],
+            'local' => $local,
         ]);
 
         return $document;
