@@ -51,9 +51,29 @@ class DocumentService
 
         $document = Document::find($params['file']);
 
-        $contents = Storage::download('documents/' . $document->file);
+        if(env('FILESYSTEM_EXTERNAL') == true){
 
-        return $contents;
+            if (Storage::disk('s3')->exists('documents/' . $document->file)) {
+                $contents = Storage::disk('s3')->download('documents/' . $document->file);
+
+                return $contents;
+            }
+
+        }else{
+            if (Storage::disk('local')->exists('documents/' . $document->file)) {
+                $contents = Storage::disk('local')->download('documents/' . $document->file);
+
+                return $contents;
+            }
+        }
+        
+
+        return [
+            'errors' => [
+                'file' => ['Arquivo não encontrado']
+            ]
+        ];
+        
     }
     
     /**
@@ -65,9 +85,14 @@ class DocumentService
     public function create(array $data): Document
     {
 
-        $file = Storage::disk('local')->put('documents', $data['file']);
+        if(env('FILESYSTEM_EXTERNAL') == true){
+            $file = Storage::disk('s3')->put('documents', $data['file']);
+        }else{
+            $file = Storage::disk('local')->put('documents', $data['file']);
+        }
 
         $nameFile = explode('documents/', $file);
+
 
         $document = Document::create([
             'title' => $data['title'],
