@@ -121,6 +121,14 @@ document.getElementsByTagName('head')[0].appendChild(cssBot);
           <li><a href="#getevents">#GetEvents</a></li> 
         </ul> 
       </li>
+      <li> 
+        <a href="#documents">DOCUMENTS</a> 
+        <ul name="sub-menu" hidden="hidden"> 
+          <li><a href="#createdocument">#CreateDocument</a></li> 
+          <li><a href="#getdocuments">#GetDocuments</a></li> 
+          <li><a href="#downloaddocuments">#DownloadDocuments</a></li> 
+        </ul> 
+      </li>
     </ul>
   </div>
 
@@ -307,4 +315,130 @@ response 200:{
 }
 
 ```
+
+### CreateDocument
+
+```
+
+=> #CreateDocument
+
+POST: https://project-ca-printf-backend.herokuapp.com/api/documents/new
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "title": "string", "Required"
+  "file": "file", "Required"
+}
+
+response 201:{
+  "data": {
+    "id": 2,
+    "title": "novo doc",
+    "file": "lhRXLyQ56m4HkVRe7jMIMBOBVvtq2w1sQzyeNlzl.png"
+  }
+}
+
+```
+
+### GetDocuments
+
+```
+
+=> #GetDocuments
+
+GET: https://project-ca-printf-backend.herokuapp.com/api/documents/
+
+User: "Anônimo"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json"
+}
+
+
+request:{
+  "paginate": "inteiro", "Usado para paginação, default=10", "Optional"
+}
+
+response 200:{
+  "data": [
+    {
+      "id": 2,
+      "title": "novo doc",
+      "file": "lhRXLyQ56m4HkVRe7jMIMBOBVvtq2w1sQzyeNlzl.png"
+    }
+  ],
+  "links": {
+    "first": "http:\/\/localhost:8000\/api\/documents?page=1",
+    "last": "http:\/\/localhost:8000\/api\/documents?page=1",
+    "prev": null,
+    "next": null
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 1,
+    "links": [
+      {
+        "url": null,
+        "label": "&laquo; Anterior",
+        "active": false
+      },
+      {
+        "url": "http:\/\/localhost:8000\/api\/documents?page=1",
+        "label": 1,
+        "active": true
+      },
+      {
+        "url": null,
+        "label": "Próxima &raquo;",
+        "active": false
+      }
+    ],
+    "path": "http:\/\/localhost:8000\/api\/documents",
+    "per_page": 10,
+    "to": 1,
+    "total": 1
+  }
+}
+
+```
+
+
+### DownloadDocument
+
+```
+
+=> #DownloadDocument
+
+POST: https://project-ca-printf-backend.herokuapp.com/api/documents/download
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "file": "integer", "exists:documents,id", "Required"
+}
+
+response 200:{
+  file
+}
+
+```
+
+
 
