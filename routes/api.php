@@ -41,7 +41,7 @@ Route::namespace('Api\Auth')->prefix('/auth')->group(function () {
 
 
 /**
- * Auth Events
+ * Routes Events
  */
 Route::namespace('Api\Event')->prefix('/events')->group(function () {
 
@@ -52,7 +52,7 @@ Route::namespace('Api\Event')->prefix('/events')->group(function () {
 
 
 /**
- * Auth Documents
+ * Routes Documents
  */
 Route::namespace('Api\Document')->prefix('/documents')->group(function () {
 
@@ -60,4 +60,26 @@ Route::namespace('Api\Document')->prefix('/documents')->group(function () {
   Route::POST('/download', 'DocumentController@download');
   Route::post('/new', 'DocumentController@create')->middleware(['auth:api']);
 
+});
+
+
+/**
+ * Routes Projects
+ */
+Route::namespace('Api\Project')->prefix('/projects')->group(function () {
+
+  Route::GET('/', 'ProjectController@get');
+  Route::post('/new', 'ProjectController@create')->middleware(['auth:api']);
+
+});
+
+
+/**
+ * Routes Images
+ */
+Route::namespace('Api\Image')->prefix('/images')->group(function () {
+
+  Route::GET('/', 'ImageController@index');
+  Route::GET('/{id}', 'ImageController@get');
+  
 });

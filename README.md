@@ -129,6 +129,19 @@ document.getElementsByTagName('head')[0].appendChild(cssBot);
           <li><a href="#downloaddocuments">#DownloadDocuments</a></li> 
         </ul> 
       </li>
+      <li> 
+        <a href="#projects">PROJECTS</a> 
+        <ul name="sub-menu" hidden="hidden"> 
+          <li><a href="#createproject">#CreateProject</a></li> 
+          <li><a href="#getprojects">#GetProjects</a></li> 
+        </ul> 
+      </li>
+      <li> 
+        <a href="#images">IMAGES</a> 
+        <ul name="sub-menu" hidden="hidden"> 
+          <li><a href="#getimages">#GetImages</a></li> 
+        </ul> 
+      </li>
     </ul>
   </div>
 
@@ -437,6 +450,138 @@ request:{
 response 200:{
   file
 }
+
+```
+
+
+### CreateProject
+
+```
+
+=> #CreateProject
+
+POST: https://project-ca-printf-backend.herokuapp.com/api/projects/new
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "title": "String", "Required",
+  "description": "String", "Required",
+  "image": "file, image", "Optional",
+}
+
+response 200:{
+  "data": {
+    "id": 5,
+    "title": "Novo Projeto",
+    "description": "Enste é o 1º projeto para crir um site para o CA-Printf.",
+    "image": "data:image;base64, + "dados-base64"
+  }
+
+```
+
+
+### GetProject
+
+```
+
+=> #GetProjects
+
+GET: https://project-ca-printf-backend.herokuapp.com/api/projects/
+
+User: "Anonimo"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "title": "String", "Required",
+  "description": "String", "Required",
+  "image": "file, image", "Optional",
+}
+
+response 200:{
+  "data": [
+    {
+       "id": 5,
+      "title": "Novo Projeto",
+      "description": "Enste é o 1º projeto para crir um site para o CA-Printf.",
+      "image": "data:image;base64, + "dados-base64"
+    }
+  ],
+  "links": {
+    "first": "http:\/\/localhost:8000\/api\/projects?page=1",
+    "last": "http:\/\/localhost:8000\/api\/projects?page=1",
+    "prev": null,
+    "next": null
+  },
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 1,
+    "links": [
+      {
+        "url": null,
+        "label": "&laquo; Anterior",
+        "active": false
+      },
+      {
+        "url": "http:\/\/localhost:8000\/api\/projects?page=1",
+        "label": 1,
+        "active": true
+      },
+      {
+        "url": null,
+        "label": "Próxima &raquo;",
+        "active": false
+      }
+    ],
+    "path": "http:\/\/localhost:8000\/api\/projects",
+    "per_page": 10,
+    "to": 4,
+    "total": 4
+  }
+}
+
+```
+
+
+
+### GetImage
+
+```
+
+=> #GetImages
+
+POST: https://project-ca-printf-backend.herokuapp.com/api/images/5
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  
+}
+
+response 200:{
+  "data:image;base64, + "dados-base64"
+  }
 
 ```
 
