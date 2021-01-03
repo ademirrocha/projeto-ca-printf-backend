@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\Project\CreateRequest;
 use App\Http\Requests\Api\Project\UpdateRequest;
+use App\Http\Requests\Api\Project\DeleteRequest;
 use App\Http\Resources\Api\Project\ProjectResource;
 use App\Services\Project\ProjectService;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,6 +54,31 @@ class ProjectController extends Controller
         $project = $this->projectService->update($request);
         
         return new ProjectResource($project);
+
+    }
+
+
+    public function delete(DeleteRequest $request)
+    {
+
+        $delete = $this->projectService->delete($request->all());
+        
+        if($delete == true){
+
+            return response()->json([
+                'success' => [
+                    'message' => 'Deletado com sucesso'
+                ]
+            ], Response::HTTP_OK);
+
+        }
+
+        return response()->json([
+            'error' => [
+                'message' => 'Não foi possivel deletar'
+            ]
+        ], Response::HTTP_UNPROCESSABLE_ENTITY);
+
 
     }
 

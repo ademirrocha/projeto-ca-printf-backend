@@ -135,5 +135,28 @@ class ProjectService
     }
 
 
+    /**
+     * #DeleteProject
+     * @param array $data
+     */
+    public function delete(array $data){
+
+        $project = Project::find($data['id']);
+
+        if(!is_null($project->image_id)){
+
+            $this->deleteFile($project);
+            
+            $imageId = $project->image_id;
+            $project->image_id = null;
+            $project->save();
+
+            Image::where('id', $imageId)->delete();
+
+        }
+        
+        return $project->delete();
+
+    }
     
 }
