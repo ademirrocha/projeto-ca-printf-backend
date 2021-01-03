@@ -181,5 +181,19 @@ class DocumentService
     }
 
 
+    /**
+     * #DeleteDocument
+     * @param array $data
+     */
+    public function delete(array $data){
+        $document = Document::find($data['id']);
+
+        $this->deleteFile($document);
+        
+        return $document->delete();
+
+    }
+
+
     
 }

@@ -73,10 +73,10 @@ class EventController extends Controller
         }
 
         return response()->json([
-                'error' => [
-                    'message' => 'Não foi possivel deletar'
-                ]
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            'error' => [
+                'message' => 'Não foi possivel deletar'
+            ]
+        ], Response::HTTP_UNPROCESSABLE_ENTITY);
         
 
     }

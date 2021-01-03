@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\Document\DocumentService;
 use App\Http\Requests\Api\Document\CreateRequest;
 use App\Http\Requests\Api\Document\UpdateRequest;
+use App\Http\Requests\Api\Document\DeleteRequest;
 use App\Http\Requests\Api\Document\DownloadRequest;
 use App\Http\Resources\Api\Document\DocumentResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,6 +71,31 @@ class DocumentController extends Controller
         $document = $this->documentService->update($request);
         
         return new DocumentResource($document);
+    }
+
+
+    public function delete(DeleteRequest $request)
+    {
+
+        $delete = $this->documentService->delete($request->all());
+        
+        if($delete == true){
+
+            return response()->json([
+                'success' => [
+                    'message' => 'Deletado com sucesso'
+                ]
+            ], Response::HTTP_OK);
+
+        }
+
+        return response()->json([
+            'error' => [
+                'message' => 'Não foi possivel deletar'
+            ]
+        ], Response::HTTP_UNPROCESSABLE_ENTITY);
+
+
     }
 
 
