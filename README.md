@@ -119,6 +119,8 @@ document.getElementsByTagName('head')[0].appendChild(cssBot);
         <ul name="sub-menu" hidden="hidden"> 
           <li><a href="#createevent">#CreateEvent</a></li> 
           <li><a href="#getevents">#GetEvents</a></li> 
+          <li><a href="#updateevents">#UpdateEvents</a></li> 
+          <li><a href="#Deleteevents">#DeleteEvents</a></li> 
         </ul> 
       </li>
       <li> 
@@ -127,6 +129,8 @@ document.getElementsByTagName('head')[0].appendChild(cssBot);
           <li><a href="#createdocument">#CreateDocument</a></li> 
           <li><a href="#getdocuments">#GetDocuments</a></li> 
           <li><a href="#downloaddocuments">#DownloadDocuments</a></li> 
+          <li><a href="#updatedocuments">#UpdateDocuments</a></li> 
+          <li><a href="#Deletedocuments">#DeleteDocuments</a></li> 
         </ul> 
       </li>
       <li> 
@@ -134,6 +138,8 @@ document.getElementsByTagName('head')[0].appendChild(cssBot);
         <ul name="sub-menu" hidden="hidden"> 
           <li><a href="#createproject">#CreateProject</a></li> 
           <li><a href="#getprojects">#GetProjects</a></li> 
+          <li><a href="#updateprojects">#UpdateProjects</a></li> 
+          <li><a href="#Deleteprojects">#DeleteProjects</a></li> 
         </ul> 
       </li>
       <li> 
@@ -329,6 +335,74 @@ response 200:{
 
 ```
 
+### UpdateEvent
+
+```
+
+=> #UpdateEvent
+
+POST: https://project-ca-printf-backend.herokuapp.com/api/events/edit
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "id": "integer", "exists:events,id", "Required"
+  "title": "string", "Required"
+  "description": "string", "Required"
+  "initial_date": "date", "Required"
+  "final_date": "date", "Required"
+  "state": "enum in:Ativo,Inativo,Cancelado", "Optional"
+}
+
+response 200:{
+  "data": {
+    "id": 5,
+    "title": "Novo Evento",
+    "description": "3º evento do CA printf 2021",
+    "initial_date": "2021-01-02",
+    "final_date": "2021-01-05",
+    "state": "Ativo"
+  }
+}
+
+```
+
+### DeleteEvent
+
+```
+
+=> #DeleteEvent
+
+DELETE: https://project-ca-printf-backend.herokuapp.com/api/events/delete
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "id": "integer", "exists:events,id", "Required"
+}
+
+response 200:{
+  "success": {
+    "message": "Deletado com sucesso"
+  }
+}
+
+```
+
 ### CreateDocument
 
 ```
@@ -348,7 +422,7 @@ in headers:{
 
 request:{
   "title": "string", "Required"
-  "file": "file", "Required"
+  "file": "file, pdf", "Required"
 }
 
 response 201:{
@@ -454,6 +528,68 @@ response 200:{
 ```
 
 
+### UpdateDocument
+
+```
+
+=> #UpdateDocument
+
+POST: https://project-ca-printf-backend.herokuapp.com/api/documents/edit
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "id": "integer", "exists:documents,id", "Required",
+  "title": "string", "Required",
+  "file": "file, pdf, or null", "Optional"
+}
+
+response 200:{
+  "data": {
+    "id": 2,
+    "title": "Alterado documento",
+    "file": "lhRXLyQ56m4HkVRe7jMIMBOBVvtq2w1sQzyeNlzl.pdf"
+  }
+}
+
+```
+
+### DeleteDocument
+
+```
+
+=> #DeleteDocument
+
+DELETE: https://project-ca-printf-backend.herokuapp.com/api/documents/delete
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "id": "integer", "exists:documents,id", "Required",
+}
+
+response 200:{
+  "success": {
+    "message": "Deletado com sucesso"
+  }
+}
+
+```
+
 ### CreateProject
 
 ```
@@ -556,6 +692,69 @@ response 200:{
 
 ```
 
+
+### UpdateProject
+
+```
+
+=> #UpdateProject
+
+POST: https://project-ca-printf-backend.herokuapp.com/api/projects/edit
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "id": "integer", "exists:projects,id", "Required",
+  "title": "String", "Required",
+  "description": "String", "Required",
+  "image": "file, image, ou null", "Optional",
+}
+
+response 200:{
+  "data": {
+    "id": 2,
+    "title": "Projeto Alterado",
+    "file": "lhRXLyQ56m4HkVRe7jMIMBOBVvtq2w1sQzyeNlzl.png"
+  }
+}
+
+```
+
+### DeleteProject
+
+```
+
+=> #DeleteProject
+
+DELETE: https://project-ca-printf-backend.herokuapp.com/api/projects/delete
+
+User: "Auth"
+
+in headers:{
+  "Content-Type": "application/json",
+  "Accept": "application/json",
+  "Authorization": "Bearer " + access_token
+}
+
+
+request:{
+  "id": "integer", "exists:projects,id", "Required",
+}
+
+response 200:{
+  "success": {
+    "message": "Deletado com sucesso"
+  }
+}
+
+```
 
 
 ### GetImage
