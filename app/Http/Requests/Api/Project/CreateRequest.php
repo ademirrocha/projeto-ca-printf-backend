@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CreateRequest extends FormRequest
 {
@@ -15,7 +16,7 @@ class CreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**

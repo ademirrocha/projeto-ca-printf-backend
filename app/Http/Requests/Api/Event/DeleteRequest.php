@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Api\Document;
+namespace App\Http\Requests\Api\Event;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class CreateRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
     
 
@@ -27,14 +27,7 @@ class CreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'string'],
-            'file' => ['required', 'file', 'mimes:pdf', 'max:10240'],
-        ];
-    }
-
-    public function messages(){
-        return [
-            'file.max' => 'Arquivo não pode ser maior que 10MB'
+            'id' => ['required', 'integer', 'exists:events,id'],
         ];
     }
 

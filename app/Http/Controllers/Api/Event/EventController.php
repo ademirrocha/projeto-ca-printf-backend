@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Event;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\Event\CreateRequest;
+use App\Http\Requests\Api\Event\UpdateRequest;
+use App\Http\Requests\Api\Event\DeleteRequest;
 use App\Http\Resources\Api\Event\EventResource;
 use App\Services\Event\EventService;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,6 +54,31 @@ class EventController extends Controller
         $event = $this->eventService->update($request->all());
         
         return new EventResource($event);
+    }
+
+
+    public function delete(DeleteRequest $request)
+    {
+
+        $delete = $this->eventService->delete($request->all());
+
+        if($delete == true){
+
+            return response()->json([
+                'success' => [
+                    'message' => 'Deletado com sucesso'
+                ]
+            ], Response::HTTP_OK);
+
+        }
+
+        return response()->json([
+                'error' => [
+                    'message' => 'Não foi possivel deletar'
+                ]
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        
+
     }
 
 

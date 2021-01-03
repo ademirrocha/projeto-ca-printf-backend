@@ -80,5 +80,18 @@ class EventService
     }
 
 
+    /**
+     * #DeleteEvent
+     * @param array $data
+     */
+    public function delete(array $data){
+        $event = Event::find($data['id']);
+
+        return $event->delete();
+
+    }
+
+
+
     
 }
