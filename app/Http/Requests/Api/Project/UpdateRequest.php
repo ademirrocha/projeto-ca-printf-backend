@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Api\Document;
+namespace App\Http\Requests\Api\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
-
 
 class UpdateRequest extends FormRequest
 {
@@ -27,32 +26,30 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
 
-        
-        if($this->hasFile('file')){
+        if($this->hasFile('image')){
             return [
-                'id' => ['required', 'integer', 'exists:documents,id'],
+                'id' => ['required', 'integer', 'exists:projects,id'],
                 'title' => ['required', 'string'],
-                'file' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+                'description' => ['required', 'string'],
+                'image' => ['nullable', 'file', 'image', 'max:2048'],
+
             ];
         }
 
-
         return [
-            'id' => ['required', 'integer', 'exists:documents,id'],
+            'id' => ['required', 'integer', 'exists:projects,id'],
             'title' => ['required', 'string'],
-            'file' => ['nullable'],
+            'description' => ['required', 'string'],
+            'image' => ['nullable'],
+
         ];
-
-
     }
 
-
-     public function messages(){
+    public function messages(){
         return [
-            'file.max' => 'Arquivo não pode ser maior que 10MB'
+            'image.max' => 'A imagem não pode ser maior que 2MB'
         ];
     }
-
 
     
 }

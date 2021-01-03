@@ -157,8 +157,7 @@ class DocumentService
 
     /**
      * #UpdateDocument
-     * @param User $Document
-     * @param array $data
+     * @param object $data
      */
     public function update(object $data): Document
     {

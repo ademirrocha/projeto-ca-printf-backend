@@ -4,7 +4,7 @@ namespace App\Models\Project;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Image\Image;
 
@@ -22,6 +22,17 @@ class Project extends Model
     	'description',
     	'image_id'
     ];
+
+
+    /**
+     * Relationship: 1x1 - Project has Image.
+     *
+     * @return object
+     */
+    public function image(): HasOne
+    {
+        return $this->hasOne(Image::class, 'id', 'image_id');
+    }
 
 
     public function getImage()

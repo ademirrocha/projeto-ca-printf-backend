@@ -72,7 +72,7 @@ Route::namespace('Api\Project')->prefix('/projects')->group(function () {
 
   Route::GET('/', 'ProjectController@get');
   Route::post('/new', 'ProjectController@create')->middleware(['auth:api']);
-
+  Route::POST('/edit', 'ProjectController@update')->middleware(['auth:api']);
 });
 
 

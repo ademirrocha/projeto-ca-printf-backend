@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\Project\CreateRequest;
+use App\Http\Requests\Api\Project\UpdateRequest;
 use App\Http\Resources\Api\Project\ProjectResource;
 use App\Services\Project\ProjectService;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,4 +46,15 @@ class ProjectController extends Controller
         
         return new ProjectResource($project);
     }
+
+    public function update(UpdateRequest $request)
+    {
+
+        $project = $this->projectService->update($request);
+        
+        return new ProjectResource($project);
+
+    }
+
+
 }

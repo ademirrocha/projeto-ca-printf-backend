@@ -24,6 +24,36 @@ class ProjectService
     }
 
 
+    private function createFile($data, $project = null){
+        if(env('FILESYSTEM_EXTERNAL') == true){
+            $file = Storage::disk('s3')->put('images', $data['image']);
+            $local = 's3';
+        }else{
+            $file = Storage::disk('local')->put('images', $data['image']);
+            $local = 'local';
+        }
+
+        $nameImage = explode('images/', $file);
+
+        if(!is_null($project) && !is_null($project->image_id)){
+            $image = Image::find($project->image_id);
+
+            $image->name = $nameImage[1];
+            $image->local = $local;
+            $image->save();
+
+        }else{
+            $image = Image::create([
+                'name' => $nameImage[1],
+                'local' => $local
+            ]);
+        }
+        
+
+        return $image;
+    }
+
+
     /**
      * #GetProjects
      * @param array $params
@@ -39,6 +69,23 @@ class ProjectService
 
         return $query->paginate($params['paginate'] ?? 10);
     }
+
+    private function deleteFile($project){
+
+        if($project->image->local == 's3'){
+
+            if (Storage::disk('s3')->exists('images/' . $project->image->name)) {
+                Storage::disk('s3')->delete('images/' . $project->image->name);
+            }
+
+        }else{
+            if (Storage::disk('local')->exists('images/' . $project->image->name)) {
+                Storage::disk('local')->delete('images/' . $project->image->name);
+
+            }
+        }
+
+    }
     
     /**
      * #CreateProject
@@ -50,22 +97,7 @@ class ProjectService
     {
 
         if(isset($data['image'])){
-
-            if(env('FILESYSTEM_EXTERNAL') == true){
-                $file = Storage::disk('s3')->put('images', $data['image']);
-                $local = 's3';
-            }else{
-                $file = Storage::disk('local')->put('images', $data['image']);
-                $local = 'local';
-            }
-
-            $nameImage = explode('images/', $file);
-
-
-            $image = Image::create([
-                'name' => $nameImage[1],
-                'local' => $local
-            ]);
+            $image = $this->createFile($data);
         }
         
         $project = Project::create([
@@ -78,14 +110,28 @@ class ProjectService
     }
 
     /**
-     * #UserUpdate-CaseUse.
-     * @param User $user
-     * @param array $data
-     * @return User
+     * #UpdateProject.
+     * @param object $data
+     * @return Project
      */
-    public function update(User $user, array $data): User
+    public function update(object $data): Project
     {
-        return $this->userRepository->update($user, $data);
+        $project = Project::find($data['id']);
+
+        if($data->hasFile('image')){
+            $this->deleteFile($project);
+
+            $image = $this->createFile($data, $project);
+
+        }
+
+        $project->title = $data['title'];
+        $project->description = $data['description'];
+        $project->image_id = $image->id ?? $project->image_id;
+
+        $project->save();
+        
+        return $project;
     }
 
 
