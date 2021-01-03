@@ -46,6 +46,26 @@ class DocumentService
 
     }
 
+    private function getDocument($document){
+
+        if($document->local == 's3'){
+
+            if (Storage::disk('s3')->exists('documents/' . $document->file)) {
+                $contents = Storage::disk('s3')->get('documents/' . $document->file);
+
+                return $contents;
+            }
+
+        }else{
+            if (Storage::disk('local')->exists('documents/' . $document->file)) {
+                $contents = Storage::disk('local')->get('documents/' . $document->file);
+
+                return $contents;
+            }
+        }
+    }
+
+
     public function download(array $params)
     {
 
@@ -91,6 +111,19 @@ class DocumentService
     public function create(array $data): Document
     {
 
+        $file = $this->createFile($data);
+
+        $document = Document::create([
+            'title' => $data['title'],
+            'file' => $file[0],
+            'local' => $file[1],
+        ]);
+
+        return $document;
+    }
+
+
+    private function createFile($data){
         if(env('FILESYSTEM_EXTERNAL') == true){
             $file = Storage::disk('s3')->put('documents', $data['file']);
             $local = 's3';
@@ -101,25 +134,51 @@ class DocumentService
 
         $nameFile = explode('documents/', $file);
 
+        return [$nameFile[1], $local];
+    }
 
-        $document = Document::create([
-            'title' => $data['title'],
-            'file' => $nameFile[1],
-            'local' => $local,
-        ]);
 
-        return $document;
+    private function deleteFile($document){
+
+        if($document->local == 's3'){
+
+            if (Storage::disk('s3')->exists('documents/' . $document->file)) {
+                Storage::disk('s3')->delete('documents/' . $document->file);
+            }
+
+        }else{
+            if (Storage::disk('local')->exists('documents/' . $document->file)) {
+                Storage::disk('local')->delete('documents/' . $document->file);
+
+            }
+        }
+
     }
 
     /**
-     * #UserUpdate-CaseUse.
-     * @param User $user
+     * #UpdateDocument
+     * @param User $Document
      * @param array $data
-     * @return User
      */
-    public function update(User $user, array $data): User
+    public function update(object $data): Document
     {
-        return $this->userRepository->update($user, $data);
+        $document = Document::find($data['id']);
+
+        if($data->hasFile('file')){
+            $this->deleteFile($document);
+
+            $file = $this->createFile($data);
+
+        }
+
+        $document->title = $data['title'];
+        $document->file = $file[0] ?? $document->file;
+        $document->local = $file[1] ?? $document->local;
+
+        $document->save();
+        
+
+        return $document;
     }
 
 

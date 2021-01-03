@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Document\DocumentService;
 use App\Http\Requests\Api\Document\CreateRequest;
+use App\Http\Requests\Api\Document\UpdateRequest;
 use App\Http\Requests\Api\Document\DownloadRequest;
 use App\Http\Resources\Api\Document\DocumentResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,6 +62,14 @@ class DocumentController extends Controller
         }
 
         return $document;
+    }
+
+    public function update(UpdateRequest $request)
+    {
+
+        $document = $this->documentService->update($request);
+        
+        return new DocumentResource($document);
     }
 
 

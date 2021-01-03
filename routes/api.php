@@ -60,6 +60,7 @@ Route::namespace('Api\Document')->prefix('/documents')->group(function () {
   Route::GET('/', 'DocumentController@get');
   Route::POST('/download', 'DocumentController@download');
   Route::post('/new', 'DocumentController@create')->middleware(['auth:api']);
+  Route::POST('/edit', 'DocumentController@update')->middleware(['auth:api']);
 
 });
 
