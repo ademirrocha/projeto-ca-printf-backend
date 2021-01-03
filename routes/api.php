@@ -47,6 +47,7 @@ Route::namespace('Api\Event')->prefix('/events')->group(function () {
 
   Route::GET('/', 'EventController@get');
   Route::post('/new', 'EventController@create')->middleware(['auth:api']);
+  Route::PUT('/edit', 'EventController@update')->middleware(['auth:api']);
 
 });
 

@@ -46,6 +46,14 @@ class EventController extends Controller
         return new EventResource($event);
     }
 
+    public function update(UpdateRequest $request)
+    {
+
+        $event = $this->eventService->update($request->all());
+        
+        return new EventResource($event);
+    }
+
 
 
 }

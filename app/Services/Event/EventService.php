@@ -34,7 +34,7 @@ class EventService
         $query = Event::query();
 
         $query->orderBy('initial_date', 'DESC');
-    
+        
         return $query->paginate($params['paginate'] ?? 10);
     }
     
@@ -59,14 +59,24 @@ class EventService
     }
 
     /**
-     * #UserUpdate-CaseUse.
-     * @param User $user
+     * #UpdateEvent
      * @param array $data
-     * @return User
+     * @return Event
      */
-    public function update(User $user, array $data): User
+    public function update(array $data): Event
     {
-        return $this->userRepository->update($user, $data);
+        $event = Event::find($data['id']);
+
+        $event->title = $data['title'];
+        $event->description = $data['description'];
+        $event->initial_date = $data['initial_date'];
+        $event->final_date = $data['final_date'];
+        $event->state = $data['state'];
+
+        $event->save();
+        
+
+        return $event;
     }
 
 
