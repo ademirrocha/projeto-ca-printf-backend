@@ -48,52 +48,5 @@ class RegisterController extends Controller
 
     }
 
-    /**
-     * #CheckUsersByProps
-     *
-     * @param CheckUserExistsRequest $request
-     * @return JsonResponse
-     */
-    public function checkUserExists(CheckUserExistsRequest $request)
-    {
-        $userCheck = $this->userService->checkUserExists($request->all());
-        $messages = [];
-        if($userCheck['result'] != 'accepted'){
-            if(isset($userCheck['errors']['username'])){
-                $resource = $this->getMessages->getMessage(null, 
-                    $options = [
-                        'username' => ['UserUsernameInUse'],
-                    ],
-                    ['message_and_embed' => true]
-                );
-                $messages['username'][] = $resource['username'];
-            }
-
-            if(isset($userCheck['errors']['email'])){
-                $resource = $this->getMessages->getMessage(null, 
-                    $options = [
-                        'email' => ['UserEmailInUse'],
-                    ],
-                    ['message_and_embed' => true]
-                );
-                $messages['email'][] = $resource['email'];
-            }
-
-            return response()->json([
-                'meta' => ['errors' => $messages]
-            ], 
-            Response::HTTP_RESERVED);
-        }else{
-            $message = $this->getMessages->getMessage(null, 
-                $options = [
-                    'message' => ['CheckInUseSuccess'],
-                ],
-                ['message_and_embed' => true]
-            );
-            return response()->json([
-                'meta' => ['success' => $message['message']]
-            ], 
-            Response::HTTP_OK);
-        }
-    }
+    
 }

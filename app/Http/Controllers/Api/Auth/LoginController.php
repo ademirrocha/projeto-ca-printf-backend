@@ -7,6 +7,7 @@ use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Resources\Api\User\UserResource;
 use App\Services\Auth\LoginService;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Request;
 
 /**
  * Class LoginController
@@ -57,20 +58,13 @@ class LoginController extends Controller
      * Deauthorize User
      *
      * @param Request $request
-     * @return JsonResponse
+     * 
      */
-    public function logout(Request $request): JsonResponse
+    public function logout(Request $request)
     {
 
         $request->user()->token()->revoke();
 
-        $resource = $this->getMessages->getMessage(null, 
-                $options = [
-                    'success' => ['UserLogoutSuccess'],
-                ],
-                ['message_and_embed' => true]
-            );
-
-        return $this->response->json(['meta' => $resource]);
+        return response()->json(['success' => 'Logout realizado com success']);
     }
 }
