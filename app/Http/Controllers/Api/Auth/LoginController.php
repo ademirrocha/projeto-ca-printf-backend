@@ -47,7 +47,7 @@ class LoginController extends Controller
         $user = $this->loginService->login($request->only('email', 'password'));
         
         if(isset($user['meta']['errors']) || isset($user['meta']['error'])){
-            return response()->json($user, 422)->header('Access-Control-Allow-Origin', '*');
+            return response()->json($user, 422);
         }
 
         $token = $user->createToken('userToken')->accessToken;
