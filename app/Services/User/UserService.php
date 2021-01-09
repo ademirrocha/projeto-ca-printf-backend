@@ -48,14 +48,29 @@ class UserService
     }
 
     /**
-     * #UserUpdate-CaseUse.
-     * @param User $user
+     * #UpdateUser.
      * @param array $data
      * @return User
      */
-    public function update(User $user, array $data): User
+    public function update(array $data): User
     {
-        return $this->userRepository->update($user, $data);
+
+        return DB::transaction(function () use ($data) {
+
+            if(isset($data['password'])){
+                $newPassword = Hash::make($data['password']);
+            }
+
+            $user = User::find(auth()->user()->id);
+
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->password = $newPassword ?? $user->password;
+
+            return $user;
+
+        });
+
     }
 
     

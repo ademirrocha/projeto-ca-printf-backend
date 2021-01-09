@@ -88,3 +88,13 @@ Route::namespace('Api\Image')->prefix('/images')->group(function () {
   Route::GET('/{id}', 'ImageController@get');
   
 });
+
+
+/**
+ * Routes Users
+ */
+Route::namespace('Api\User')->prefix('/users')->group(function () {
+
+  Route::POST('/edit', 'UserController@update')->middleware(['auth:api']);
+  
+});
