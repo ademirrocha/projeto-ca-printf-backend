@@ -29,7 +29,7 @@ class CreateRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'image' => ['nullable', 'file', 'image', 'max:2048'],
+            //'image' => ['nullable', 'file', 'image', 'max:2048'],
 
         ];
     }
