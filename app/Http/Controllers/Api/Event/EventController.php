@@ -36,7 +36,11 @@ class EventController extends Controller
 
         $events = $this->eventService->get($request->all());
 
-        return EventResource::collection($events);
+        $res =  EventResource::collection($events);
+
+        $res->withPath(env('APP_URL_FRONT').'/eventos');
+
+        return ($res);
     }
 
 
