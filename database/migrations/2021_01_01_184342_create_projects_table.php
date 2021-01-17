@@ -17,10 +17,10 @@ class CreateProjectsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->unsignedBigInteger('image_id')->nullable();
+            $table->unsignedBigInteger('file_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('image_id')->references('id')->on('images');
+            $table->foreign('file_id')->references('id')->on('files');
         });
     }
 

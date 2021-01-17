@@ -4,8 +4,8 @@ namespace App\Services\Project;
 
 use App\Models\Project\Project;
 use Illuminate\Support\Facades\Storage;
-
-use App\Models\Image\Image;
+use Illuminate\Support\Str;
+use App\Models\File\File;
 /**
  * Class ProjectService
  *
@@ -25,32 +25,30 @@ class ProjectService
 
 
     private function createFile($data, $project = null){
-        if(env('FILESYSTEM_EXTERNAL') == true){
-            $file = Storage::disk('s3')->put('images', $data['image']);
-            $local = 's3';
-        }else{
-            $file = Storage::disk('local')->put('images', $data['image']);
-            $local = 'local';
-        }
 
-        $nameImage = explode('images/', $file);
 
-        if(!is_null($project) && !is_null($project->image_id)){
-            $image = Image::find($project->image_id);
+        if(!is_null($project) && !is_null($project->file_id)){
+            $file = File::find($project->file_id);
 
-            $image->name = $nameImage[1];
-            $image->local = $local;
-            $image->save();
+            $file->originalName = $data['image']['originalName'] ?? $file->originalName;
+            $file->mimetype = $data['image']['mimetype'];
+            $file->size = $data['image']['size'];
+            $file->key = $data['image']['key'];
+            $file->url = $data['image']['url'];
+            
+            $file->save();
 
         }else{
-            $image = Image::create([
-                'name' => $nameImage[1],
-                'local' => $local
+            $file = File::create([
+                'originalName' => $data['image']['originalName'] ?? null,
+                'mimetype' => $data['image']['mimetype'],
+                'size' => $data['image']['size'],
+                'key' => $data['image']['key'],
+                'url' => $data['image']['url']
             ]);
         }
-        
 
-        return $image;
+        return $file;
     }
 
 
@@ -96,14 +94,14 @@ class ProjectService
     public function create(array $data): Project
     {
 
-        if(isset($data['image'])){
+        if(isset($data['image']) && !is_null($data['image']) && isset($data['image']['url']) && !is_null($data['image']['url'])){
             $image = $this->createFile($data);
         }
         
         $project = Project::create([
             'title' => $data['title'],
             'description' => $data['description'],
-            'image_id' => $image->id ?? null,
+            'file_id' => $image->id ?? null,
         ]);
 
         return $project;

@@ -29,14 +29,19 @@ class CreateRequest extends FormRequest
         return [
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
-            //'image' => ['nullable', 'file', 'image', 'max:2048'],
+            'image' => ['nullable' , 'array'],
+            'image.originalName' => ['nullable', 'string'],
+            'image.size' => ['required_with:image', 'integer', 'between:2,'. (2 * 1024 * 1024)],
+            'image.mimetype' => ['required_with:image', 'string'],
+            'image.key' => ['required_with:image', 'string'],
+            'image.url' => ['required_with:image', 'url'],
 
         ];
     }
 
     public function messages(){
         return [
-            'image.max' => 'A imagem não pode ser maior que 2MB'
+            'image.size.between' => 'A imagem não pode ser maior que 2MB'
         ];
     }
 

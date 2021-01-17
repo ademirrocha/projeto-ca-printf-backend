@@ -16,9 +16,11 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('file');
+            $table->unsignedBigInteger('file_id');
             $table->string('local');
             $table->timestamps();
+
+            $table->foreign('file_id')->references('id')->on('files');
         });
     }
 

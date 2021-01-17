@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Image\Image;
+use App\Models\File\File;
 
 class Project extends Model
 {
@@ -20,46 +20,17 @@ class Project extends Model
     protected $fillable = [
     	'title',
     	'description',
-    	'image_id'
+    	'file_id'
     ];
 
 
     /**
-     * Relationship: 1x1 - Project has Image.
+     * Relationship: 1x1 - Project has File.
      *
      * @return object
      */
-    public function image(): HasOne
+    public function file(): HasOne
     {
-        return $this->hasOne(Image::class, 'id', 'image_id');
-    }
-
-
-    public function getImage()
-    {
-        
-        $image = Image::find($this->image_id);
-
-        if(!is_null($image) && $image->local == 's3'){
-
-            if (Storage::disk('s3')->exists('images/' . $image->name)) {
-                $contents = Storage::disk('s3')->get('images/' . $image->name);
-
-                $base64=base64_encode($contents);
-
-                return 'data:image;base64,'.$base64;
-            }
-
-        }else if(!is_null($image)){
-            if (Storage::disk('local')->exists('images/' . $image->name)) {
-                $contents = Storage::disk('local')->get('images/' . $image->name);
-
-                $base64=base64_encode($contents);
-
-                return 'data:image;base64,'.$base64;
-            }
-        }
-
-        return 'Image Not Found';
+        return $this->hasOne(File::class, 'id', 'file_id');
     }
 }

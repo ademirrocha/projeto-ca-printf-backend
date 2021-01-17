@@ -11,6 +11,8 @@ use App\Http\Resources\Api\Project\ProjectResource;
 use App\Services\Project\ProjectService;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -40,11 +42,10 @@ class ProjectController extends Controller
     }
 
 
-    public function create(CreateRequest $request)
-    {
+    public function create(CreateRequest $request){
 
         $project = $this->projectService->create($request->all());
-        
+
         return new ProjectResource($project);
     }
 
@@ -52,7 +53,7 @@ class ProjectController extends Controller
     {
 
         $project = $this->projectService->update($request);
-        
+
         return new ProjectResource($project);
 
     }
@@ -62,7 +63,7 @@ class ProjectController extends Controller
     {
 
         $delete = $this->projectService->delete($request->all());
-        
+
         if($delete == true){
 
             return response()->json([

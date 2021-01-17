@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Api\Project;
+namespace App\Http\Resources\Api\File;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Api\File\FileResource;
 
-class ProjectResource extends JsonResource
+class FileResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -19,9 +18,11 @@ class ProjectResource extends JsonResource
 
     return [
       'id' => $this->id,
-      'title' => $this->title,
-      'description' => $this->description,
-      'image' => new FileResource($this->file)
+      'originalName' => $this->originalName,
+      'mimetype' => $this->mimetype,
+      'size' => $this->size,
+      'key' => $this->key,
+      'url' => $this->url,
     ];
   }
 }
