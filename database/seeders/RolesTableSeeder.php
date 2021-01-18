@@ -16,29 +16,29 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::transaction(function () {
-            foreach (Role::all() as $role) {
-                $role->delete();
-            }
+        
+        foreach (Role::all() as $role) {
+            $role->delete();
+        }
 
-            $max = DB::table('roles')->max('id') + 1; 
-            DB::statement("ALTER TABLE roles AUTO_INCREMENT =  $max");
+        $max = DB::table('roles')->max('id') + 1; 
+        DB::statement("ALTER TABLE roles AUTO_INCREMENT =  $max");
 
-            $roles = [
-                'user',
-                'admin',
-                'moderator',
-            ];
+        $roles = [
+            'user',
+            'admin',
+            'moderator',
+        ];
 
-            foreach ($roles as $role) {
-                Role::create(['name' => $role, 'guard_name' => 'api']);
-            }
+        foreach ($roles as $role) {
+            Role::create(['name' => $role, 'guard_name' => 'api']);
+        }
 
 
-            foreach (User::all() as $user) {
-                $user->assignRole('user');
-            }
+        foreach (User::all() as $user) {
+            $user->assignRole('user');
+        }
 
-        });
+        
     }
 }
