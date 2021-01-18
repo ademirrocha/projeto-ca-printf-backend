@@ -3,7 +3,7 @@
 namespace App\Services\Document;
 
 use App\Models\Document\Document;
-
+use App\Models\File\File;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -34,6 +34,20 @@ class DocumentService
     {
 
         $query = Document::query();
+
+        if(isset($params['search']) && !is_null($params['search'])){
+            $query->where(function($query) use ($params){
+
+                if(isset($params['search'])){
+
+                    $query->where('title', 'LIKE', "%{$params['search']}%");
+                    $query->orWhere('description', 'LIKE', "%{$params['search']}%");
+
+                }
+
+            });
+        }
+
 
         $query->orderBy('title', 'ASC');
 
@@ -92,16 +106,16 @@ class DocumentService
                 return $contents;
             }
         }
-        
+
 
         return [
             'errors' => [
                 'file' => ['Arquivo não encontrado']
             ]
         ];
-        
+
     }
-    
+
     /**
      * #CreateEvent
      * @param array $data
@@ -115,7 +129,7 @@ class DocumentService
             $file = $this->createFile($data);
         }
 
-        if(!is_null($data['school_class'])){
+        if(isset($data['school_class']) && !is_null($data['school_class'])){
             $schoolClass = getSchoolClass($data);
         }
 
@@ -124,7 +138,7 @@ class DocumentService
             'title' => $data['title'],
             'description' => $data['description'] ?? null,
             'type' => $data['type'] ?? null,
-            'state' => $data['state'] ?? null,
+            'state' => $data['state'] ?? 'Ativo',
             'file_id' => $file->id,
             'school_class' => $schoolClass ?? null,
         ]);
@@ -136,7 +150,7 @@ class DocumentService
     private function getSchoolClass($data){
 
 
-        if(is_integer($data['school_class']) && SchoolClass::where('id', $data['school_class'])exists()){
+        if(is_integer($data['school_class']) && SchoolClass::where('id', $data['school_class'])->exists()){
 
             $schoolClass = SchoolClass::find($data['school_class']);
             
