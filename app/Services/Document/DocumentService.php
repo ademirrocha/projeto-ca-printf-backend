@@ -42,6 +42,7 @@ class DocumentService
 
                     $query->where('title', 'LIKE', "%{$params['search']}%");
                     $query->orWhere('description', 'LIKE', "%{$params['search']}%");
+                    $query->orWhere('type', 'LIKE', "%{$params['search']}%");
 
                 }
 
