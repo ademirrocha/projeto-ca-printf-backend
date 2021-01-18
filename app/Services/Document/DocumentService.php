@@ -111,30 +111,70 @@ class DocumentService
     public function create(array $data): Document
     {
 
-        $file = $this->createFile($data);
+        if(isset($data['file']) && !is_null($data['file']) && isset($data['file']['url']) && !is_null($data['file']['url'])){
+            $file = $this->createFile($data);
+        }
+
+        if(!is_null($data['school_class'])){
+            $schoolClass = getSchoolClass($data);
+        }
+
 
         $document = Document::create([
             'title' => $data['title'],
-            'file' => $file[0],
-            'local' => $file[1],
+            'description' => $data['description'] ?? null,
+            'type' => $data['type'] ?? null,
+            'state' => $data['state'] ?? null,
+            'file_id' => $file->id,
+            'school_class' => $schoolClass ?? null,
         ]);
 
         return $document;
     }
 
 
-    private function createFile($data){
-        if(env('FILESYSTEM_EXTERNAL') == true){
-            $file = Storage::disk('s3')->put('documents', $data['file']);
-            $local = 's3';
+    private function getSchoolClass($data){
+
+
+        if(is_integer($data['school_class']) && SchoolClass::where('id', $data['school_class'])exists()){
+
+            $schoolClass = SchoolClass::find($data['school_class']);
+            
         }else{
-            $file = Storage::disk('local')->put('documents', $data['file']);
-            $local = 'local';
+            $schoolClass = SchoolClass::create([
+                'name' => $data['school_class']
+            ]);
         }
 
-        $nameFile = explode('documents/', $file);
+        return $schoolClass;
+    }
 
-        return [$nameFile[1], $local];
+
+    private function createFile($data, $document = null){
+
+
+        if(!is_null($document) && !is_null($document->file_id)){
+            $file = File::find($document->file_id);
+
+            $file->originalName = $data['file']['originalName'] ?? $file->originalName;
+            $file->mimetype = $data['file']['mimetype'];
+            $file->size = $data['file']['size'];
+            $file->key = $data['file']['key'];
+            $file->url = $data['file']['url'];
+            
+            $file->save();
+
+        }else{
+            $file = File::create([
+                'originalName' => $data['file']['originalName'] ?? null,
+                'mimetype' => $data['file']['mimetype'],
+                'size' => $data['file']['size'],
+                'key' => $data['file']['key'],
+                'url' => $data['file']['url']
+            ]);
+        }
+
+        return $file;
     }
 
 

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Api\User;
+namespace App\Http\Resources\Api\SchoolClass;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Api\User\RoleResource;
 
-class UserResource extends JsonResource
+class SchoolClassResource extends JsonResource
 {
   /**
    * Transform the resource into an array.
@@ -19,9 +18,7 @@ class UserResource extends JsonResource
 
     return [
       'id' => $this->id,
-      'email' => $this->email,
       'name' => $this->name,
-      'roles' = RoleResource::collection($this->roles);
     ];
   }
 }

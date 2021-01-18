@@ -4,6 +4,8 @@ namespace App\Http\Resources\Api\Document;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Api\File\FileResource;
+use App\Http\Resources\Api\SchoolClass\SchoolClassResource;
 
 class DocumentResource extends JsonResource
 {
@@ -19,7 +21,11 @@ class DocumentResource extends JsonResource
     return [
       'id' => $this->id,
       'title' => $this->title,
-      'file' => $this->file,
+      'description' => $this->description,
+      'type' => $this->type,
+      'state' => $this->state,
+      'file' => new FileResource($this->file),
+      'school_class' => new SchoolClassResource($this->schoolClass),
     ];
   }
 }

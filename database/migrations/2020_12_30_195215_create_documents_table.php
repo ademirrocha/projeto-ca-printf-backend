@@ -16,11 +16,19 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('description')->nullable();
             $table->unsignedBigInteger('file_id');
-            $table->string('local');
+            $table->unsignedBigInteger('school_class_id')->nullable();
+            $table->string('type')->nullable();
+            $table->ENUM('state', [
+                'Ativo',
+                'Inativo',
+                'Cancelado'
+            ])->default('Ativo');
             $table->timestamps();
 
             $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('school_class_id')->references('id')->on('school_classes');
         });
     }
 
