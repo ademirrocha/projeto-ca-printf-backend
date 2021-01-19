@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+  return $request->user();
 });
 
 
@@ -46,9 +46,13 @@ Route::namespace('Api\Auth')->prefix('/auth')->group(function () {
 Route::namespace('Api\Event')->prefix('/events')->group(function () {
 
   Route::GET('/', 'EventController@get');
-  Route::post('/new', 'EventController@create')->middleware(['auth:api']);
-  Route::POST('/edit', 'EventController@update')->middleware(['auth:api']);
-  Route::DELETE('/delete', 'EventController@delete')->middleware(['auth:api']);
+
+
+  Route::middleware(['auth:api'])->group(function(){
+    Route::post('/new', 'EventController@create')->middleware(['role:admin|moderator']);
+    Route::POST('/edit', 'EventController@update')->middleware(['role:admin|moderator']);
+    Route::DELETE('/delete', 'EventController@delete')->middleware(['role:admin|moderator']);
+  });
 
 });
 
@@ -60,9 +64,12 @@ Route::namespace('Api\Document')->prefix('/documents')->group(function () {
 
   Route::GET('/', 'DocumentController@get');
   Route::POST('/download', 'DocumentController@download');
-  Route::post('/new', 'DocumentController@create');
-  Route::POST('/edit', 'DocumentController@update')->middleware(['auth:api']);
-  Route::DELETE('/delete', 'DocumentController@delete')->middleware(['auth:api']);
+
+  Route::middleware(['auth:api'])->group(function(){
+    Route::post('/new', 'DocumentController@create')->middleware(['role:admin|moderator']);
+    Route::POST('/edit', 'DocumentController@update')->middleware(['role:admin|moderator']);
+    Route::DELETE('/delete', 'DocumentController@delete')->middleware(['role:admin|moderator']);
+  });
 
 });
 
@@ -73,9 +80,13 @@ Route::namespace('Api\Document')->prefix('/documents')->group(function () {
 Route::namespace('Api\Project')->prefix('/projects')->group(function () {
 
   Route::GET('/', 'ProjectController@get');
-  Route::post('/new', 'ProjectController@create')->middleware(['auth:api']);
-  Route::POST('/edit', 'ProjectController@update')->middleware(['auth:api']);
-  Route::DELETE('/delete', 'ProjectController@delete')->middleware(['auth:api']);
+
+  Route::middleware(['auth:api'])->group(function(){
+    Route::post('/new', 'ProjectController@create')->middleware(['role:admin|moderator']);
+    Route::POST('/edit', 'ProjectController@update')->middleware(['role:admin|moderator']);
+    Route::DELETE('/delete', 'ProjectController@delete')->middleware(['role:admin|moderator']);
+
+  });
 });
 
 
