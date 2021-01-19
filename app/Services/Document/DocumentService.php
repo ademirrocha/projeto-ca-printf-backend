@@ -65,8 +65,8 @@ class DocumentService
 
         if($document->local == 's3'){
 
-            if (Storage::disk('s3')->exists('documents/' . $document->file)) {
-                $contents = Storage::disk('s3')->get('documents/' . $document->file);
+            if (Storage::disk('s3')->exists($document->file)) {
+                $contents = Storage::disk('s3')->get($document->file);
 
                 return $contents;
             }
