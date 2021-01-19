@@ -86,15 +86,22 @@ class DocumentService
 
         $file = File::where('key', $params['file'])->first();
 
+        if($file->local == 's3'){
+            $nameFile = explode('/', $file->key);
+            $nameFile = $nameFile[1];
+        }else{
+            $nameFile = $file->key;
+        }
 
-        if($file->local == 's3' && Storage::disk('s3')->exists($file->key) ) {
 
-            $contents = Storage::disk('s3')->download($file->key, $file->key);
+        if($file->local == 's3' && Storage::disk('s3')->exists('documents/' . $nameFile) ) {
+
+            $contents = Storage::disk('s3')->download('documents/' . $nameFile, $nameFile);
 
             return $contents;
 
-        }else if (Storage::disk('local')->exists('documents/' . $file->key)) {
-            $contents = Storage::disk('local')->download('documents/' . $file->key, $file->key);
+        }else if (Storage::disk('local')->exists('documents/' . $nameFile)) {
+            $contents = Storage::disk('local')->download('documents/' . $nameFile, $nameFile);
 
             return $contents;
 
