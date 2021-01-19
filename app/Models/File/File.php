@@ -15,5 +15,7 @@ class File extends Model
     	'size',
     	'key',
     	'url',
+    	'url_download',
+    	'local',
     ];
 }

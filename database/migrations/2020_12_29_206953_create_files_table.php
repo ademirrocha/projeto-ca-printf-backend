@@ -20,6 +20,8 @@ class CreateFilesTable extends Migration
             $table->integer('size');
             $table->string('key');
             $table->text('url');
+            $table->text('url_download')->nullable();
+            $table->char('local')->nullable();
             $table->timestamps();
         });
     }

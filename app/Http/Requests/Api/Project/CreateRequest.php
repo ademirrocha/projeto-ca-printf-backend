@@ -35,7 +35,7 @@ class CreateRequest extends FormRequest
             'image.mimetype' => ['required_with:image', 'string'],
             'image.key' => ['required_with:image', 'string'],
             'image.url' => ['required_with:image', 'url'],
-
+            'image.url_download' => ['nullable', 'url'],
         ];
     }
 

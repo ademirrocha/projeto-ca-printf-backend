@@ -23,6 +23,7 @@ class FileResource extends JsonResource
       'size' => $this->size,
       'key' => $this->key,
       'url' => $this->url,
+      'url_download' => $this->url_download,
     ];
   }
 }

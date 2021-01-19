@@ -38,6 +38,7 @@ class CreateRequest extends FormRequest
             'file.mimetype' => ['required_with:file', 'string'],
             'file.key' => ['required_with:file', 'string'],
             'file.url' => ['required_with:file', 'url'],
+            'file.url_download' => ['nullable', 'url'],
         ];
     }
 

@@ -31,10 +31,12 @@ class ProjectService
             $file = File::find($project->file_id);
 
             $file->originalName = $data['image']['originalName'] ?? $file->originalName;
-            $file->mimetype = $data['image']['mimetype'];
-            $file->size = $data['image']['size'];
-            $file->key = $data['image']['key'];
-            $file->url = $data['image']['url'];
+            $file->mimetype = $data['image']['mimetype'] ?? $file->mimetype;
+            $file->size = $data['image']['size'] ?? $file->size;
+            $file->key = $data['image']['key'] ?? $file->key;
+            $file->url = $data['image']['url'] ?? $file->url;
+            $file->url_download = $data['image']['url_download'] ?? $file->url_download;
+            $file->local = $data['image']['local'] ?? $file->local;
             
             $file->save();
 
@@ -44,7 +46,9 @@ class ProjectService
                 'mimetype' => $data['image']['mimetype'],
                 'size' => $data['image']['size'],
                 'key' => $data['image']['key'],
-                'url' => $data['image']['url']
+                'url' => $data['image']['url'],
+                'url_download' => $data['image']['url_download'] ?? null,
+                'local' => $data['image']['local'] ?? null
             ]);
         }
 

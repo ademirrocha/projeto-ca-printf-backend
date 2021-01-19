@@ -25,7 +25,7 @@ class DownloadRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => ['required', 'integer', 'exists:documents,id'],
+            'file' => ['required', 'string', 'exists:files,key'],
         ];
     }
 

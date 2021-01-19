@@ -84,36 +84,31 @@ class DocumentService
     public function download(array $params)
     {
 
-        $document = Document::find($params['file']);
+        $file = File::where('key', $params['file'])->first();
 
-        $nameFile = preg_replace('/[ _]+/' , '_' , $document->title);
 
-        $extension = explode('.', $document->file);
+        if($file->local == 's3' && Storage::disk('s3')->exists('documents/' . $file->key) ) {
 
-        $nameFile = $nameFile.'.'.$extension[1];
+            $contents = Storage::disk('s3')->download('documents/' . $file->key, $file->key);
 
-        if($document->local == 's3'){
+            return $contents;
 
-            if (Storage::disk('s3')->exists('documents/' . $document->file)) {
-                $contents = Storage::disk('s3')->download('documents/' . $document->file, $nameFile);
+        }else if (Storage::disk('local')->exists('documents/' . $file->key)) {
+            $contents = Storage::disk('local')->download('documents/' . $file->key, $file->key);
 
-                return $contents;
-            }
+            return $contents;
 
         }else{
-            if (Storage::disk('local')->exists('documents/' . $document->file)) {
-                $contents = Storage::disk('local')->download('documents/' . $document->file, $nameFile);
 
-                return $contents;
-            }
+            return [
+                'errors' => [
+                    'file' => ['Arquivo não encontrado']
+                ]
+            ];
         }
 
 
-        return [
-            'errors' => [
-                'file' => ['Arquivo não encontrado']
-            ]
-        ];
+
 
     }
 
@@ -172,10 +167,12 @@ class DocumentService
             $file = File::find($document->file_id);
 
             $file->originalName = $data['file']['originalName'] ?? $file->originalName;
-            $file->mimetype = $data['file']['mimetype'];
-            $file->size = $data['file']['size'];
-            $file->key = $data['file']['key'];
-            $file->url = $data['file']['url'];
+            $file->mimetype = $data['file']['mimetype'] ?? $file->mimetype;
+            $file->size = $data['file']['size'] ?? $file->size;
+            $file->key = $data['file']['key'] ??$file->key;
+            $file->url = $data['file']['url'] ?? $file->url;
+            $file->url_download = $data['file']['url_download'] ?? $file->url_download;
+            $file->local = $data['file']['local'] ?? $file->local;
             
             $file->save();
 
@@ -185,7 +182,9 @@ class DocumentService
                 'mimetype' => $data['file']['mimetype'],
                 'size' => $data['file']['size'],
                 'key' => $data['file']['key'],
-                'url' => $data['file']['url']
+                'url' => $data['file']['url'],
+                'url_download' => $data['file']['url_download'] ?? null,
+                'local' => $data['file']['local'] ?? null
             ]);
         }
 
