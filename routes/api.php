@@ -45,7 +45,8 @@ Route::namespace('Api\Auth')->prefix('/auth')->group(function () {
  */
 Route::namespace('Api\Event')->prefix('/events')->group(function () {
 
-  Route::GET('/', 'EventController@get');
+  Route::GET('/', 'EventController@index');
+  Route::GET('/get/{id}', 'EventController@get');
 
 
   Route::middleware(['auth:api'])->group(function(){

@@ -23,12 +23,12 @@ class EventService
 
 
     /**
-     * #GetEvents
+     * #GetAllEvents
      * @param array $params
      *
      */
 
-    public function get(array $params)
+    public function all(array $params)
     {
 
         $query = Event::query();
@@ -36,6 +36,20 @@ class EventService
         $query->orderBy('initial_date', 'DESC');
         
         return $query->paginate($params['paginate'] ?? 10);
+    }
+
+    /**
+     * #GetEvent
+     * @param array $params
+     *
+     */
+
+    public function get(int $id)
+    {
+
+        $event = Event::find($id);
+        
+        return $event;
     }
     
     /**

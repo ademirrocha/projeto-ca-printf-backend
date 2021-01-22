@@ -30,17 +30,32 @@ class EventController extends Controller
         $this->eventService = $eventService;
     }
 
-
-    public function get(Request $request): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
 
-        $events = $this->eventService->get($request->all());
+        $events = $this->eventService->all($request->all());
 
         $res =  EventResource::collection($events);
 
         $res->withPath(env('APP_URL_FRONT').'/eventos');
 
         return ($res);
+    }
+
+    public function get(Request $request, int $id)
+    {
+
+        $event = $this->eventService->get($id);
+        if(!is_null($event)){
+            return new EventResource($event);
+        }else{
+            return response()->json([
+            'error' => [
+                'message' => 'Evento não encontrado'
+            ]
+        ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        
     }
 
 

@@ -31,7 +31,7 @@ class CreateRequest extends FormRequest
             'description' => ['required', 'string'],
             'initial_date' => ['required', 'date'],
             'final_date' => ['required', 'date', 'after_or_equal:initial_date'],
-            'state' => ['in:Ativo,Inativo,Cancelado'],
+            'state' => ['in:Ativo,Inativo,Cancelado,Em Andamento,Não Iniciado,Concluído'],
         ];
     }
 

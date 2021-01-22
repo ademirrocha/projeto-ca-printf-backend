@@ -22,7 +22,10 @@ class CreateEventsTable extends Migration
             $table->ENUM('state', [
                     'Ativo',
                     'Inativo',
-                    'Cancelado'
+                    'Cancelado',
+                    'Em Andamento',
+                    'Não Iniciado',
+                    'Concluído'
                 ])->default('Ativo');
             $table->timestamps();
         });
