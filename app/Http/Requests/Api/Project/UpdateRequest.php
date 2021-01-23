@@ -27,28 +27,23 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
 
-        if($this->hasFile('image')){
-            return [
-                'id' => ['required', 'integer', 'exists:projects,id'],
-                'title' => ['required', 'string'],
-                'description' => ['required', 'string'],
-                'image' => ['nullable', 'file', 'image', 'max:2048'],
-
-            ];
-        }
-
         return [
             'id' => ['required', 'integer', 'exists:projects,id'],
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'image' => ['nullable'],
-
+            'image' => ['nullable' , 'array'],
+            'image.originalName' => ['nullable', 'string'],
+            'image.size' => ['required_with:image', 'integer', 'between:2,'. (2 * 1024 * 1024)],
+            'image.mimetype' => ['required_with:image', 'string'],
+            'image.key' => ['required_with:image', 'string'],
+            'image.url' => ['required_with:image', 'url'],
+            'image.url_download' => ['nullable', 'url'],
         ];
     }
 
     public function messages(){
         return [
-            'image.max' => 'A imagem não pode ser maior que 2MB'
+            'image.size.between' => 'A imagem não pode ser maior que 2MB'
         ];
     }
 

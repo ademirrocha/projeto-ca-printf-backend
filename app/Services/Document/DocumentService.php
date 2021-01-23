@@ -176,7 +176,7 @@ class DocumentService
             $file->originalName = $data['file']['originalName'] ?? $file->originalName;
             $file->mimetype = $data['file']['mimetype'] ?? $file->mimetype;
             $file->size = $data['file']['size'] ?? $file->size;
-            $file->key = $data['file']['key'] ??$file->key;
+            $file->key = $data['file']['key'] ?? $file->key;
             $file->url = $data['file']['url'] ?? $file->url;
             $file->url_download = $data['file']['url_download'] ?? $file->url_download;
             $file->local = $data['file']['local'] ?? $file->local;

@@ -80,7 +80,8 @@ Route::namespace('Api\Document')->prefix('/documents')->group(function () {
  */
 Route::namespace('Api\Project')->prefix('/projects')->group(function () {
 
-  Route::GET('/', 'ProjectController@get');
+  Route::GET('/', 'ProjectController@index');
+  Route::GET('/get/{id}', 'ProjectController@get');
 
   Route::middleware(['auth:api'])->group(function(){
     Route::post('/new', 'ProjectController@create')->middleware(['role:admin|moderator']);

@@ -57,12 +57,12 @@ class ProjectService
 
 
     /**
-     * #GetProjects
+     * #GetAllProjects
      * @param array $params
      *
      */
 
-    public function get(array $params)
+    public function all(array $params)
     {
 
         $query = Project::query();
@@ -72,20 +72,52 @@ class ProjectService
         return $query->paginate($params['paginate'] ?? 10);
     }
 
+    /**
+     * #GetProject
+     * @param int $id
+     *
+     */
+
+    public function get(int $id)
+    {
+
+        $project = Project::find($id);
+        
+        return $project;
+    }
+
     private function deleteFile($project){
 
-        if($project->image->local == 's3'){
 
-            if (Storage::disk('s3')->exists('images/' . $project->image->name)) {
-                Storage::disk('s3')->delete('images/' . $project->image->name);
+        $file = $project->file;
+
+        if($file->local == 's3'){
+            $nameFile = explode('/', $file->key);
+            $nameFile = $nameFile[1];
+        }else{
+            $nameFile = $file->key;
+        }
+
+
+
+        if($project->file->local == 's3'){
+
+            if (Storage::disk('s3')->exists('images/' . $nameFile)) {
+                Storage::disk('s3')->delete('images/' . $nameFile);
             }
 
         }else{
-            if (Storage::disk('local')->exists('images/' . $project->image->name)) {
-                Storage::disk('local')->delete('images/' . $project->image->name);
+            if (Storage::disk('local')->exists('images/' . $nameFile)) {
+                Storage::disk('local')->delete('images/' . $nameFile);
 
             }
         }
+
+        $id = $project->file_id;
+        $project->file_id = null;
+        $project->save();
+
+        File::where('id', $id)->delete();
 
     }
     
@@ -120,19 +152,23 @@ class ProjectService
     {
         $project = Project::find($data['id']);
 
-        if($data->hasFile('image')){
-            $this->deleteFile($project);
+        if(isset($data['image']) && !is_null($data['image']) && isset($data['image']['url']) && !is_null($data['image']['url'])){
 
-            $image = $this->createFile($data, $project);
+            $image = $this->createFile($data);
+
+            if(!is_null($project->file_id)){
+                $this->deleteFile($project);
+
+            }
 
         }
 
         $project->title = $data['title'];
         $project->description = $data['description'];
-        $project->image_id = $image->id ?? $project->image_id;
+        $project->file_id = $image->id ?? $project->file_id;
 
         $project->save();
-        
+
         return $project;
     }
 
@@ -145,16 +181,9 @@ class ProjectService
 
         $project = Project::find($data['id']);
 
-        if(!is_null($project->image_id)){
+        if(!is_null($project->file_id)){
 
             $this->deleteFile($project);
-            
-            $imageId = $project->image_id;
-            $project->image_id = null;
-            $project->save();
-
-            Image::where('id', $imageId)->delete();
-
         }
         
         return $project->delete();

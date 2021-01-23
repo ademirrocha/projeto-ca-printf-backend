@@ -40,7 +40,7 @@ class EventService
 
     /**
      * #GetEvent
-     * @param array $params
+     * @param int $id
      *
      */
 

@@ -33,12 +33,33 @@ class ProjectController extends Controller
     }
 
 
-    public function get(Request $request): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
 
-        $projects = $this->projectService->get($request->all());
+        $projects = $this->projectService->all($request->all());
 
         return ProjectResource::collection($projects);
+    }
+
+
+
+    public function get(Request $request, int $id)
+    {
+
+        $project = $this->projectService->get($id);
+        
+        if(!is_null($project)){
+            return new ProjectResource($project);
+        }else{
+            return response()->json([
+            'error' => [
+                'message' => 'Projeto não encontrado'
+            ]
+        ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+
+
     }
 
 
