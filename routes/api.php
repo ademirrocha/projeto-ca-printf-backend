@@ -63,7 +63,8 @@ Route::namespace('Api\Event')->prefix('/events')->group(function () {
  */
 Route::namespace('Api\Document')->prefix('/documents')->group(function () {
 
-  Route::GET('/', 'DocumentController@get');
+  Route::GET('/', 'DocumentController@index');
+  Route::GET('/get/{id}', 'DocumentController@get');
   Route::POST('/download', 'DocumentController@download');
 
   Route::middleware(['auth:api'])->group(function(){

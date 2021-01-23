@@ -42,12 +42,28 @@ class DocumentController extends Controller
     }
 
 
-    public function get(Request $request)
+    public function index(Request $request)
     {
 
-    	$documents = $this->documentService->get($request->all());
+    	$documents = $this->documentService->all($request->all());
 
         return DocumentResource::collection($documents);
+    }
+
+    public function get(Request $request, int $id)
+    {
+
+        $document = $this->documentService->get($id);
+        
+        if(!is_null($document)){
+            return new DocumentResource($document);
+        }else{
+            return response()->json([
+                'error' => [
+                    'message' => 'Documento não encontrado'
+                ]
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
     }
 
 

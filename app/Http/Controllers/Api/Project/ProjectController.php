@@ -52,14 +52,11 @@ class ProjectController extends Controller
             return new ProjectResource($project);
         }else{
             return response()->json([
-            'error' => [
-                'message' => 'Projeto não encontrado'
-            ]
-        ], Response::HTTP_UNPROCESSABLE_ENTITY);
+                'error' => [
+                    'message' => 'Projeto não encontrado'
+                ]
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
-
-
     }
 
 

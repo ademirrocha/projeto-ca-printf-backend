@@ -25,12 +25,12 @@ class DocumentService
 
 
     /**
-     * #GetDocuments
+     * #GetAllDocuments
      * @param array $params
      *
      */
 
-    public function get(array $params)
+    public function all(array $params)
     {
 
         $query = Document::query();
@@ -59,6 +59,21 @@ class DocumentService
         //Storage::disk('local')->put('documents', $request->file);
 
 
+    }
+
+
+    /**
+     * #GetDocument
+     * @param int $id
+     *
+     */
+
+    public function get(int $id)
+    {
+
+        $document = Document::find($id);
+        
+        return $document;
     }
 
     private function getDocument($document){
@@ -201,18 +216,29 @@ class DocumentService
 
     private function deleteFile($document){
 
-        if($document->local == 's3'){
+        $file = $document->file;
 
-            if (Storage::disk('s3')->exists('documents/' . $document->file)) {
-                Storage::disk('s3')->delete('documents/' . $document->file);
+        if($file->local == 's3'){
+            $nameFile = explode('/', $file->key);
+            $nameFile = $nameFile[1];
+        }else{
+            $nameFile = $file->key;
+        }
+
+        if($document->file->local == 's3'){
+
+            if (Storage::disk('s3')->exists('documents/' . $nameFile)) {
+                Storage::disk('s3')->delete('documents/' . $nameFile);
             }
 
         }else{
-            if (Storage::disk('local')->exists('documents/' . $document->file)) {
-                Storage::disk('local')->delete('documents/' . $document->file);
+            if (Storage::disk('local')->exists('documents/' . $nameFile)) {
+                Storage::disk('local')->delete('documents/' . $nameFile);
 
             }
         }
+
+        
 
     }
 
@@ -224,17 +250,23 @@ class DocumentService
     {
         $document = Document::find($data['id']);
 
-        if($data->hasFile('file')){
+
+        if(isset($data['file']) && !is_null($data['file']) && isset($data['file']['url']) && !is_null($data['file']['url'])){
+
             $this->deleteFile($document);
 
             $file = $this->createFile($data);
 
+            $id = $document->file_id;
+            $document->file_id = $file->id ?? $document->file_id;
+            $document->save();
+
+            File::where('id', $id)->delete();
         }
 
         $document->title = $data['title'];
-        $document->file = $file[0] ?? $document->file;
-        $document->local = $file[1] ?? $document->local;
-
+        $document->description = $data['description'] ?? $document->description;
+        
         $document->save();
         
 
