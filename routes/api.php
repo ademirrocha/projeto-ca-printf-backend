@@ -52,7 +52,7 @@ Route::namespace('Api\Event')->prefix('/events')->group(function () {
   Route::middleware(['auth:api'])->group(function(){
     Route::post('/new', 'EventController@create')->middleware(['role:admin|moderator']);
     Route::POST('/edit', 'EventController@update')->middleware(['role:admin|moderator']);
-    Route::DELETE('/delete', 'EventController@delete')->middleware(['role:admin|moderator']);
+    Route::POST('/delete', 'EventController@delete')->middleware(['role:admin']);
   });
 
 });
