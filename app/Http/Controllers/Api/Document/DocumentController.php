@@ -34,9 +34,17 @@ class DocumentController extends Controller
 
 
 
+    public function types(CreateRequest $request)
+    {
+    	$typeDocuments = $this->documentService->types($request->all());
+
+        return $typeDocuments;
+    }
+
+
     public function create(CreateRequest $request)
     {
-    	$document = $this->documentService->create($request->all());
+        $document = $this->documentService->create($request->all());
 
         return new DocumentResource($document);
     }

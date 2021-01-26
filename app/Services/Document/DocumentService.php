@@ -4,6 +4,7 @@ namespace App\Services\Document;
 
 use App\Models\Document\Document;
 use App\Models\File\File;
+use App\Models\SchoolClass\SchoolClass;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -21,6 +22,18 @@ class DocumentService
     public function __construct()
     {
         //
+    }
+
+    public function types(array $params){
+        $query = Document::query();
+
+        $query->select('type');
+        $query->where('type', '!=', null);
+
+        $query->groupBy('type');
+        $query->orderBy('type', 'ASC');
+
+        return $query->get();
     }
 
 
@@ -148,7 +161,7 @@ class DocumentService
         }
 
         if(isset($data['school_class']) && !is_null($data['school_class'])){
-            $schoolClass = getSchoolClass($data);
+            $schoolClass = $this->getSchoolClass($data);
         }
 
 
@@ -158,7 +171,7 @@ class DocumentService
             'type' => $data['type'] ?? null,
             'state' => $data['state'] ?? 'Ativo',
             'file_id' => $file->id,
-            'school_class' => $schoolClass ?? null,
+            'school_class_id' => $schoolClass->id ?? null,
         ]);
 
         return $document;
@@ -168,7 +181,7 @@ class DocumentService
     private function getSchoolClass($data){
 
 
-        if(is_integer($data['school_class']) && SchoolClass::where('id', $data['school_class'])->exists()){
+        if(is_numeric($data['school_class']) && SchoolClass::where('id', $data['school_class'])->exists()){
 
             $schoolClass = SchoolClass::find($data['school_class']);
             
@@ -264,12 +277,18 @@ class DocumentService
             File::where('id', $id)->delete();
         }
 
+        if(isset($data['school_class']) && !is_null($data['school_class'])){
+            $schoolClass = $this->getSchoolClass($data);
+        }
+
         $document->title = $data['title'];
         $document->description = $data['description'] ?? $document->description;
+        $document->school_class_id = $schoolClass->id ?? null;
+        $document->type = $data['type'] ?? null;
+        $document->state = $data['state'] ?? $document->state;
         
         $document->save();
         
-
         return $document;
     }
 

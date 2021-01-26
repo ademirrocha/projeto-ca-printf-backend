@@ -65,6 +65,7 @@ Route::namespace('Api\Document')->prefix('/documents')->group(function () {
 
   Route::GET('/', 'DocumentController@index');
   Route::GET('/get/{id}', 'DocumentController@get');
+  Route::GET('/types', 'DocumentController@types');
   Route::POST('/download', 'DocumentController@download');
 
   Route::middleware(['auth:api'])->group(function(){
@@ -110,5 +111,15 @@ Route::namespace('Api\Image')->prefix('/images')->group(function () {
 Route::namespace('Api\User')->prefix('/users')->group(function () {
 
   Route::POST('/edit', 'UserController@update')->middleware(['auth:api']);
+  
+});
+
+
+/**
+ * Routes Users
+ */
+Route::namespace('Api\SchoolClass')->prefix('/school-classes')->group(function () {
+
+  Route::GET('/', 'SchoolClassController@index');
   
 });

@@ -25,7 +25,7 @@ class DocumentResource extends JsonResource
       'type' => $this->type,
       'state' => $this->state,
       'file' => new FileResource($this->file),
-      'school_class' => new SchoolClassResource($this->schoolClass),
+      'schoolClass' => new SchoolClassResource($this->schoolClass),
     ];
   }
 }

@@ -44,7 +44,7 @@ class Document extends Model
      */
     public function schoolClass(): HasOne
     {
-        return $this->hasOne(File::class, 'id', 'school_class_id');
+        return $this->hasOne(SchoolClass::class, 'id', 'school_class_id');
     }
 
 
