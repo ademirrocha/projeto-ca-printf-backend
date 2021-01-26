@@ -70,7 +70,7 @@ Route::namespace('Api\Document')->prefix('/documents')->group(function () {
   Route::middleware(['auth:api'])->group(function(){
     Route::post('/new', 'DocumentController@create')->middleware(['role:admin|moderator']);
     Route::POST('/edit', 'DocumentController@update')->middleware(['role:admin|moderator']);
-    Route::DELETE('/delete', 'DocumentController@delete')->middleware(['role:admin|moderator']);
+    Route::POST('/delete', 'DocumentController@delete')->middleware(['role:admin']);
   });
 
 });
@@ -87,7 +87,7 @@ Route::namespace('Api\Project')->prefix('/projects')->group(function () {
   Route::middleware(['auth:api'])->group(function(){
     Route::post('/new', 'ProjectController@create')->middleware(['role:admin|moderator']);
     Route::POST('/edit', 'ProjectController@update')->middleware(['role:admin|moderator']);
-    Route::DELETE('/delete', 'ProjectController@delete')->middleware(['role:admin|moderator']);
+    Route::POST('/delete', 'ProjectController@delete')->middleware(['role:admin']);
 
   });
 });

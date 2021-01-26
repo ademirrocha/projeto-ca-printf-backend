@@ -282,8 +282,14 @@ class DocumentService
         $document = Document::find($data['id']);
 
         $this->deleteFile($document);
+
+        $id = $document->file_id;
         
-        return $document->delete();
+        $delete = $document->delete();
+
+        File::where('id', $id)->delete();
+
+        return $delete;
 
     }
 

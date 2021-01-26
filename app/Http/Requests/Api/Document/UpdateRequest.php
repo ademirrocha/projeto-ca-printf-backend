@@ -31,7 +31,7 @@ class UpdateRequest extends FormRequest
         return [
             'id' => ['required', 'integer', 'exists:documents,id'],
             'title' => ['required', 'string'],
-            'file' => ['required' , 'array'],
+            'file' => ['nullable' , 'array'],
             'file.originalName' => ['nullable', 'string'],
             'file.size' => ['required_with:file', 'integer', 'between:2,'. (10 * 1024 * 1024)],
             'file.mimetype' => ['required_with:file', 'string'],
