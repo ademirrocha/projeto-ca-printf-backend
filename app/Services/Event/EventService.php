@@ -85,7 +85,7 @@ class EventService
         $event->description = $data['description'];
         $event->initial_date = $data['initial_date'];
         $event->final_date = $data['final_date'];
-        $event->state = $data['state'];
+        $event->state = $data['state'] ?? $event->state;
 
         $event->save();
         

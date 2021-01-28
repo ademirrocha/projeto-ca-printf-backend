@@ -21,6 +21,7 @@ class ProjectResource extends JsonResource
       'id' => $this->id,
       'title' => $this->title,
       'description' => $this->description,
+      'state' => $this->state,
       'image' => new FileResource($this->file)
     ];
   }

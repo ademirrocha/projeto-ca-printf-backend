@@ -138,6 +138,7 @@ class ProjectService
             'title' => $data['title'],
             'description' => $data['description'],
             'file_id' => $image->id ?? null,
+            'state' => $data['state'] ?? 'Ativo',
         ]);
 
         return $project;
@@ -166,6 +167,7 @@ class ProjectService
         $project->title = $data['title'];
         $project->description = $data['description'];
         $project->file_id = $image->id ?? $project->file_id;
+        $project->state = $data['state'] ?? $project->state;
 
         $project->save();
 

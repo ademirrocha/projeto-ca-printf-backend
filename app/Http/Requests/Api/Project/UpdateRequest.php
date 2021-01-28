@@ -38,6 +38,7 @@ class UpdateRequest extends FormRequest
             'image.key' => ['required_with:image', 'string'],
             'image.url' => ['required_with:image', 'url'],
             'image.url_download' => ['nullable', 'url'],
+            'state' => ['in:Ativo,Inativo,Cancelado,Em Andamento,Não Iniciado,Concluído'],
         ];
     }
 

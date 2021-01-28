@@ -116,10 +116,20 @@ Route::namespace('Api\User')->prefix('/users')->group(function () {
 
 
 /**
- * Routes Users
+ * Routes SchoolClass
  */
 Route::namespace('Api\SchoolClass')->prefix('/school-classes')->group(function () {
 
   Route::GET('/', 'SchoolClassController@index');
+  
+});
+
+
+/**
+ * Routes Search
+ */
+Route::namespace('Api\Search')->prefix('/search')->group(function () {
+
+  Route::GET('/', 'SearchController@index');
   
 });

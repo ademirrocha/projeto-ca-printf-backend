@@ -19,7 +19,8 @@ class Project extends Model
     protected $fillable = [
     	'title',
     	'description',
-    	'file_id'
+    	'file_id',
+        'state'
     ];
 
 
