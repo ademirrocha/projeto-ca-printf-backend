@@ -133,3 +133,16 @@ Route::namespace('Api\Search')->prefix('/search')->group(function () {
   Route::GET('/', 'SearchController@index');
   
 });
+
+
+/**
+ * Routes Members CA
+ */
+Route::namespace('Api\MemberCa')->prefix('/academic-center')->group(function () {
+
+  Route::GET('/members', 'MemberCaController@index');
+  Route::middleware(['auth:api'])->group(function(){
+    Route::POST('/members/edit', 'MemberCaController@update')->middleware(['role:admin']);
+  });
+  
+});
