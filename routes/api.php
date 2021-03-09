@@ -146,3 +146,16 @@ Route::namespace('Api\MemberCa')->prefix('/academic-center')->group(function () 
   });
   
 });
+
+
+/**
+ * Routes ContentText
+ */
+Route::namespace('Api\ContentText')->prefix('/content-text')->group(function () {
+  
+  Route::GET('/', 'ContentTextController@index');
+
+  Route::POST('/edit', 'ContentTextController@update');
+  
+  
+});
