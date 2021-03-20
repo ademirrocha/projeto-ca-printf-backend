@@ -87,8 +87,6 @@ class ProjectService
     }
 
     private function deleteFile($project){
-
-
         $file = $project->file;
 
         if($file->local == 's3'){
@@ -98,18 +96,14 @@ class ProjectService
             $nameFile = $file->key;
         }
 
-
-
         if($project->file->local == 's3'){
 
             if (Storage::disk('s3')->exists('images/' . $nameFile)) {
                 Storage::disk('s3')->delete('images/' . $nameFile);
             }
-
         }else{
             if (Storage::disk('local')->exists('images/' . $nameFile)) {
                 Storage::disk('local')->delete('images/' . $nameFile);
-
             }
         }
 

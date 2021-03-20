@@ -16,7 +16,7 @@ class CreateContentTextsTable extends Migration
         Schema::create('content_texts', function (Blueprint $table) {
             $table->id();
             $table->char('content');
-            $table->text('text');
+            $table->text('text')->nullable();
             $table->unsignedBigInteger('file_id')->nullable();
             $table->enum('type', [
                 'text',

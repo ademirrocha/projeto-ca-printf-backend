@@ -31,21 +31,23 @@ class UpdateRequest extends FormRequest
         
         return [
             'content' => ['required', 'string'],
-            'newText' => ['required', 'string'],
+            'newText' => ['required_without:image', 'string'],
             'type' => ['nullable', 'in:text,image'],
-            'file' => ['nullable' , 'array'],
-            'file.originalName' => ['nullable', 'string'],
-            'file.size' => ['required_with:file', 'integer', 'between:2,'. (5 * 1024 * 1024)],
-            'file.mimetype' => ['required_with:file', 'string'],
-            'file.key' => ['required_with:file', 'string'],
-            'file.url' => ['required_with:file', 'url'],
-            'file.url_download' => ['nullable', 'url'],
+            'image' => ['required_without:newText' , 'array'],
+            'image.originalName' => ['nullable', 'string'],
+            'image.size' => ['required_with:image', 'integer', 'between:2,'. (5 * 1024 * 1024)],
+            'image.mimetype' => ['required_with:image', 'string'],
+            'image.key' => ['required_with:image', 'string'],
+            'image.url' => ['required_with:image', 'url'],
+            'image.url_download' => ['nullable', 'url'],
         ];
     }
 
     public function messages(){
         return [
-            'file.size.between' => 'Arquivo não pode ser maior que 5MB'
+            'image.size.between' => 'Arquivo não pode ser maior que 5MB',
+            'newText.required_without' => 'Obrigatório o envio do conteúdo',
+            'image.required_without' => 'Obrigatório o envio do conteúdo'
         ];
     }
 
