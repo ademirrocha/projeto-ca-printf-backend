@@ -154,8 +154,9 @@ Route::namespace('Api\MemberCa')->prefix('/academic-center')->group(function () 
 Route::namespace('Api\ContentText')->prefix('/content-text')->group(function () {
   
   Route::GET('/', 'ContentTextController@index');
-
-  Route::POST('/edit', 'ContentTextController@update');
   
+  Route::middleware(['auth:api'])->group(function(){
+    Route::POST('/edit', 'ContentTextController@update')->middleware(['role:admin']);
+  });
   
 });
